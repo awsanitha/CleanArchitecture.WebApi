@@ -155,9 +155,8 @@ namespace Infrastructure.Identity.Services
 
         private string RandomTokenString()
         {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
             var randomBytes = new byte[40];
-            rngCryptoServiceProvider.GetBytes(randomBytes);
+            RandomNumberGenerator.Fill(randomBytes);
             // convert random bytes to hex string
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
