@@ -1,0 +1,38 @@
+  Determining projects to restore...
+/data/code/WebApi/WebApi.csproj : warning NU1608: Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 13.0.1 was resolved. [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/WebApi/WebApi.csproj : error NU1605: Warning As Error: Detected package downgrade: System.IdentityModel.Tokens.Jwt from 7.1.2 to 6.7.1. Reference the package directly from the project to select a different version.  [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/WebApi/WebApi.csproj : error NU1605:  WebApi -> Infrastructure.Identity -> Microsoft.AspNetCore.Authentication.JwtBearer 8.0.22 -> Microsoft.IdentityModel.Protocols.OpenIdConnect 7.1.2 -> System.IdentityModel.Tokens.Jwt (>= 7.1.2)  [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/WebApi/WebApi.csproj : error NU1605:  WebApi -> Infrastructure.Identity -> System.IdentityModel.Tokens.Jwt (>= 6.7.1) [/data/code/CleanArchitecture.WebApi.sln]
+  Failed to restore /data/code/WebApi/WebApi.csproj (in 1.91 sec).
+/data/code/Infrastructure.Shared/Infrastructure.Shared.csproj : warning NU1608: Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 13.0.1 was resolved. [/data/code/CleanArchitecture.WebApi.sln]
+  Restored /data/code/Infrastructure.Shared/Infrastructure.Shared.csproj (in 88 ms).
+/data/code/Infrastructure.Persistence/Infrastructure.Persistence.csproj : warning NU1608: Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 13.0.1 was resolved. [/data/code/CleanArchitecture.WebApi.sln]
+  Restored /data/code/Infrastructure.Persistence/Infrastructure.Persistence.csproj (in 30 ms).
+/data/code/Infrastructure.Identity/Infrastructure.Identity.csproj : warning NU1608: Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 13.0.1 was resolved. [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Infrastructure.Identity/Infrastructure.Identity.csproj : warning NU1902: Package 'System.IdentityModel.Tokens.Jwt' 6.7.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52 [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Infrastructure.Identity/Infrastructure.Identity.csproj : error NU1605: Warning As Error: Detected package downgrade: System.IdentityModel.Tokens.Jwt from 7.1.2 to 6.7.1. Reference the package directly from the project to select a different version.  [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Infrastructure.Identity/Infrastructure.Identity.csproj : error NU1605:  Infrastructure.Identity -> Microsoft.AspNetCore.Authentication.JwtBearer 8.0.22 -> Microsoft.IdentityModel.Protocols.OpenIdConnect 7.1.2 -> System.IdentityModel.Tokens.Jwt (>= 7.1.2)  [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Infrastructure.Identity/Infrastructure.Identity.csproj : error NU1605:  Infrastructure.Identity -> System.IdentityModel.Tokens.Jwt (>= 6.7.1) [/data/code/CleanArchitecture.WebApi.sln]
+  Failed to restore /data/code/Infrastructure.Identity/Infrastructure.Identity.csproj (in 41 ms).
+  Restored /data/code/Domain/Domain.csproj (in 2 ms).
+/data/code/Application/Application.csproj : warning NU1608: Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 13.0.1 was resolved. [/data/code/CleanArchitecture.WebApi.sln]
+  Restored /data/code/Application/Application.csproj (in 9 ms).
+
+Build FAILED.
+
+/data/code/WebApi/WebApi.csproj : warning NU1608: Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 13.0.1 was resolved. [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Infrastructure.Shared/Infrastructure.Shared.csproj : warning NU1608: Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 13.0.1 was resolved. [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Infrastructure.Persistence/Infrastructure.Persistence.csproj : warning NU1608: Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 13.0.1 was resolved. [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Infrastructure.Identity/Infrastructure.Identity.csproj : warning NU1608: Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 13.0.1 was resolved. [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Infrastructure.Identity/Infrastructure.Identity.csproj : warning NU1902: Package 'System.IdentityModel.Tokens.Jwt' 6.7.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52 [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Application/Application.csproj : warning NU1608: Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 13.0.1 was resolved. [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/WebApi/WebApi.csproj : error NU1605: Warning As Error: Detected package downgrade: System.IdentityModel.Tokens.Jwt from 7.1.2 to 6.7.1. Reference the package directly from the project to select a different version.  [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/WebApi/WebApi.csproj : error NU1605:  WebApi -> Infrastructure.Identity -> Microsoft.AspNetCore.Authentication.JwtBearer 8.0.22 -> Microsoft.IdentityModel.Protocols.OpenIdConnect 7.1.2 -> System.IdentityModel.Tokens.Jwt (>= 7.1.2)  [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/WebApi/WebApi.csproj : error NU1605:  WebApi -> Infrastructure.Identity -> System.IdentityModel.Tokens.Jwt (>= 6.7.1) [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Infrastructure.Identity/Infrastructure.Identity.csproj : error NU1605: Warning As Error: Detected package downgrade: System.IdentityModel.Tokens.Jwt from 7.1.2 to 6.7.1. Reference the package directly from the project to select a different version.  [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Infrastructure.Identity/Infrastructure.Identity.csproj : error NU1605:  Infrastructure.Identity -> Microsoft.AspNetCore.Authentication.JwtBearer 8.0.22 -> Microsoft.IdentityModel.Protocols.OpenIdConnect 7.1.2 -> System.IdentityModel.Tokens.Jwt (>= 7.1.2)  [/data/code/CleanArchitecture.WebApi.sln]
+/data/code/Infrastructure.Identity/Infrastructure.Identity.csproj : error NU1605:  Infrastructure.Identity -> System.IdentityModel.Tokens.Jwt (>= 6.7.1) [/data/code/CleanArchitecture.WebApi.sln]
+    6 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:04.02
