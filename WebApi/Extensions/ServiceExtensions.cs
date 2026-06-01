@@ -46,9 +46,6 @@ namespace WebApi.Extensions
                                 Type = ReferenceType.SecurityScheme,
                                 Id = "Bearer",
                             },
-                            Scheme = "Bearer",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header,
                         }, new List<string>()
                     },
                 });

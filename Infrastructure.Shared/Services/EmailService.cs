@@ -35,10 +35,10 @@ namespace Infrastructure.Shared.Services
                 builder.HtmlBody = request.Body;
                 email.Body = builder.ToMessageBody();
                 using var smtp = new SmtpClient();
-                smtp.Connect(_mailSettings.SmtpHost, _mailSettings.SmtpPort, SecureSocketOptions.StartTls);
-                smtp.Authenticate(_mailSettings.SmtpUser, _mailSettings.SmtpPass);
+                await smtp.ConnectAsync(_mailSettings.SmtpHost, _mailSettings.SmtpPort, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(_mailSettings.SmtpUser, _mailSettings.SmtpPass);
                 await smtp.SendAsync(email);
-                smtp.Disconnect(true);
+                await smtp.DisconnectAsync(true);
 
             }
             catch (System.Exception ex)
