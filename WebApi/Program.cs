@@ -1,68 +1,91 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+using Application;
+using Application.Interfaces;
+using Infrastructure.Identity;
+using Infrastructure.Identity.Models;
+using Infrastructure.Identity.Seeds;
+using Infrastructure.Persistence;
+using Infrastructure.Shared;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Http.Extensions;
 using Serilog;
-using Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
-using Infrastructure.Identity.Models;
-using Microsoft.Extensions.DependencyInjection;
+using System;
+using WebApi.Extensions;
+using WebApi.Services;
 
-namespace WebApi
+var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog from appsettings.json
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+// Add services
+builder.Services.AddApplicationLayer();
+builder.Services.AddIdentityInfrastructure(builder.Configuration);
+builder.Services.AddPersistenceInfrastructure(builder.Configuration);
+builder.Services.AddSharedInfrastructure(builder.Configuration);
+builder.Services.AddSwaggerExtension();
+builder.Services.AddControllers();
+builder.Services.AddApiVersioningExtension();
+builder.Services.AddHealthChecks();
+builder.Services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
+
+var app = builder.Build();
+
+// Seed default data on startup
+using (var scope = app.Services.CreateScope())
 {
-    public class Program
+    var services = scope.ServiceProvider;
+    try
     {
-        public async static Task Main(string[] args)
-        {
-            //Read Configuration from appSettings
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-            //Initialize Logger
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(config)
-                .CreateLogger();
-            var host = CreateHostBuilder(args).Build();
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-                try
-                {
-                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        await DefaultRoles.SeedAsync(userManager, roleManager);
+        await DefaultSuperAdmin.SeedAsync(userManager, roleManager);
+        await DefaultBasicUser.SeedAsync(userManager, roleManager);
 
-                    await Infrastructure.Identity.Seeds.DefaultRoles.SeedAsync(userManager, roleManager);
-                    await Infrastructure.Identity.Seeds.DefaultSuperAdmin.SeedAsync(userManager, roleManager);
-                    await Infrastructure.Identity.Seeds.DefaultBasicUser.SeedAsync(userManager, roleManager);
-                    Log.Information("Finished Seeding Default Data");
-                    Log.Information("Application Starting");
-                    host.Run();
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "An error occurred seeding the DB");
-                }
-                finally
-                {
-                    Log.CloseAndFlush();
-                }
-            }
-           
-        }
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-            .UseSerilog() //Uses Serilog instead of default .NET Logger
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        Log.Information("Finished Seeding Default Data");
     }
+    catch (Exception ex)
+    {
+        Log.Warning(ex, "An error occurred seeding the DB");
+    }
+}
+
+// Configure the HTTP request pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseSwaggerExtension();
+app.UseErrorHandlingMiddleware();
+app.UseHealthChecks("/health");
+
+app.MapControllers();
+
+Log.Information("Application Starting");
+
+try
+{
+    await app.RunAsync();
+}
+finally
+{
+    Log.CloseAndFlush();
 }

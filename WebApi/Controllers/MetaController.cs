@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace WebApi.Controllers
 {
@@ -8,7 +9,7 @@ namespace WebApi.Controllers
         [HttpGet("/info")]
         public ActionResult<string> Info()
         {
-            var assembly = typeof(Startup).Assembly;
+            var assembly = Assembly.GetExecutingAssembly();
 
             var lastUpdate = System.IO.File.GetLastWriteTime(assembly.Location);
             var version = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
