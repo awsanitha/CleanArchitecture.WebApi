@@ -6,22 +6,18 @@ using Domain.Settings;
 using Infrastructure.Identity.Helpers;
 using Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Net.Cache;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Application.Enums;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Primitives;
 using Application.DTOs.Email;
 
 namespace Infrastructure.Identity.Services
@@ -56,7 +52,7 @@ namespace Infrastructure.Identity.Services
             {
                 throw new ApiException($"No Accounts Registered with {request.Email}.");
             }
-            var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(user.UserName ?? request.Email, request.Password, false, lockoutOnFailure: false);
             if (!result.Succeeded)
             {
                 throw new ApiException($"Invalid Credentials for '{request.Email}'.");
@@ -132,9 +128,9 @@ namespace Infrastructure.Identity.Services
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? string.Empty),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
                 new Claim("uid", user.Id),
                 new Claim("ip", ipAddress)
             }
@@ -155,9 +151,8 @@ namespace Infrastructure.Identity.Services
 
         private string RandomTokenString()
         {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
             var randomBytes = new byte[40];
-            rngCryptoServiceProvider.GetBytes(randomBytes);
+            RandomNumberGenerator.Fill(randomBytes);
             // convert random bytes to hex string
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
