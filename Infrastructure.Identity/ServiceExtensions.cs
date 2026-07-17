@@ -1,9 +1,7 @@
-﻿using Application.Exceptions;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Wrappers;
 using Domain.Settings;
 using Infrastructure.Identity.Contexts;
-using Infrastructure.Identity.Helpers;
 using Infrastructure.Identity.Models;
 using Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,10 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Identity
@@ -76,14 +73,14 @@ namespace Infrastructure.Identity
                             context.HandleResponse();
                             context.Response.StatusCode = 401;
                             context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject(new Response<string>("You are not Authorized"));
+                            var result = JsonSerializer.Serialize(new Response<string>("You are not Authorized"));
                             return context.Response.WriteAsync(result);
                         },
                         OnForbidden = context =>
                         {
                             context.Response.StatusCode = 403;
                             context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject(new Response<string>("You are not authorized to access this resource"));
+                            var result = JsonSerializer.Serialize(new Response<string>("You are not authorized to access this resource"));
                             return context.Response.WriteAsync(result);
                         },
                     };
