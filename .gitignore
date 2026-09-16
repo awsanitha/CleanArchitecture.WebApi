@@ -340,4 +340,11 @@ ASALocalRun/
 healthchecksdb
 
 WebApi/appsettings.Development.json
-VSIXCore/
+VSIXCore/checklist-*.md
+checklist-planner-*.md
+checklist-convert-*.md
+.artifacts/
+.migration-artifacts/
+progress.json
+migration-summary.md
+nextsteps.md
