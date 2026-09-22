@@ -1,12 +1,7 @@
-﻿using Application.Enums;
+using Application.Enums;
 using Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Crypto.Prng.Drbg;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Identity.Seeds
@@ -15,7 +10,6 @@ namespace Infrastructure.Identity.Seeds
     {
         public static async Task SeedAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            //Seed Default User
             var defaultUser = new ApplicationUser
             {
                 UserName = "superadmin",
@@ -36,7 +30,6 @@ namespace Infrastructure.Identity.Seeds
                     await userManager.AddToRoleAsync(defaultUser, Roles.Admin.ToString());
                     await userManager.AddToRoleAsync(defaultUser, Roles.SuperAdmin.ToString());
                 }
-
             }
         }
     }
