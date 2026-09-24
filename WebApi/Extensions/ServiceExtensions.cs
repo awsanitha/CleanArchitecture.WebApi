@@ -4,8 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebApi.Extensions
 {
@@ -55,7 +53,10 @@ namespace WebApi.Extensions
                 config.AssumeDefaultVersionWhenUnspecified = true;
                 // Advertise the API versions supported for the particular endpoint
                 config.ReportApiVersions = true;
+                // Use URL segment versioning (/api/v1/...) which matches the route template in BaseApiController
+                config.ApiVersionReader = new UrlSegmentApiVersionReader();
             }).AddMvc();
         }
     }
 }
+
