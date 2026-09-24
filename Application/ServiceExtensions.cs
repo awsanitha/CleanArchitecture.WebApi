@@ -1,13 +1,8 @@
 ﻿using Application.Behaviours;
-using Application.Features.Products.Commands.CreateProduct;
-using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace Application
 {
@@ -15,11 +10,11 @@ namespace Application
     {
         public static void AddApplicationLayer(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            // AutoMapper 16.x uses AddMaps for assembly scanning (built-in DI, no separate Extensions package)
+            services.AddAutoMapper(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
         }
     }
 }
