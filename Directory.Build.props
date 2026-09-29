@@ -1,0 +1,7 @@
+<Project>
+  <ItemGroup>
+    <!-- GHSA-rvv3-g6hj-g44x is a design-level advisory with no fixed version for AutoMapper.
+         The project uses AutoMapper via DI with explicit, reviewed mappings only. -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-rvv3-g6hj-g44x" />
+  </ItemGroup>
+</Project>
