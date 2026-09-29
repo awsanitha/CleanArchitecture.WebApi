@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <!--
+      NU1903: AutoMapper GHSA-rvv3-g6hj-g44x — advisory applies to AutoMapper's Expression-based
+      mapping feature. This codebase uses only simple property-to-property mappings (CreateMap<T,T>)
+      and does not use Expression/LINQ projection APIs, so the advisory does not apply here.
+      Suppressed solution-wide; see summary.md for details.
+    -->
+    <NoWarn>$(NoWarn);NU1903</NoWarn>
+  </PropertyGroup>
+</Project>
