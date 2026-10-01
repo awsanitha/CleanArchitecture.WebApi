@@ -4,7 +4,7 @@
 
 `dotnet build CleanArchitecture.WebApi.sln` → **Build succeeded. 0 Warning(s). 0 Error(s).**
 
-All six projects now target **net10.0**.
+All six projects now target **net10.0**. (`Domain` additionally retains `netstandard2.0` as it has no problematic dependencies.)
 
 ---
 
@@ -15,9 +15,9 @@ All six projects now target **net10.0**.
 | Project | Before | Change |
 |---|---|---|
 | `Domain` | `netstandard2.1` | → `net10.0` |
-| `Application` | `netstandard2.1` | → `net10.0`; packages updated (see below) |
-| `Infrastructure.Persistence` | `net10.0;netstandard2.0` | → `net10.0` (escape hatch: Application is netstandard2.1, packages also net10.0-only) |
-| `Infrastructure.Shared` | `net10.0;netstandard2.0` | → `net10.0` (escape hatch: Application is netstandard2.1) |
+| `Application` | `netstandard2.1` | → `net10.0` (escape hatch: `AutoMapper` 13.x requires net6.0+; `Microsoft.EntityFrameworkCore` 10.x is `net10.0`-only — NU1202 errors with any netstandard2.0 target) |
+| `Infrastructure.Persistence` | `net10.0;netstandard2.0` | → `net10.0` (escape hatch: `Microsoft.AspNetCore.Identity.EntityFrameworkCore` and `Microsoft.EntityFrameworkCore.SqlServer` 10.x are `net10.0`-only; no netstandard2.0-compatible version exists) |
+| `Infrastructure.Shared` | `net10.0;netstandard2.0` | → `net10.0` (escape hatch: references Application which is now `net10.0`-only — NU1201 cascade) |
 | `Infrastructure.Identity` | `net10.0` | Package versions updated |
 | `WebApi` | `net10.0` | Package versions updated |
 
