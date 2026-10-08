@@ -2,7 +2,7 @@
 
 ## Result
 
-`dotnet build CleanArchitecture.WebApi.sln` → **Build succeeded. 0 Warning(s). 0 Error(s).**
+`dotnet build CleanArchitecture.WebApi.sln` → **Build succeeded. 0 Warning(s). 0 Error(s).** (Debug and Release)
 
 All six projects now target **net10.0**.
 
