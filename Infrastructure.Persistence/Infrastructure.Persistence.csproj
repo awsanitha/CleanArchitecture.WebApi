@@ -1,27 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>net10.0;netstandard2.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <Version>1.1.0</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Migrations\20200627124316_Updates.cs" />
     <Compile Remove="Migrations\20200627124316_Updates.Designer.cs" />
     <Compile Remove="Migrations\20200724180907_New.cs" />
     <Compile Remove="Migrations\20200724180907_New.Designer.cs" />
+    <!-- EF Core SqlServer: net10.0 uses v10, netstandard2.0 uses v3.1 (last version supporting netstandard2.0) -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.13" Condition="'$(TargetFramework)'=='net10.0'" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" Condition="'$(TargetFramework)'=='netstandard2.0'" />
+    <!-- EF Core InMemory: same versioning strategy -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.13" Condition="'$(TargetFramework)'=='net10.0'" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.7" Condition="'$(TargetFramework)'=='netstandard2.0'" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.13" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.7" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.7" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
-
 </Project>
