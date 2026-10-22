@@ -4,7 +4,10 @@ using Infrastructure.Identity;
 using Infrastructure.Persistence;
 using Infrastructure.Shared;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -55,6 +58,20 @@ namespace WebApi
            app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                // Terminal endpoint for the UseExceptionHandler("/Error") re-execute above.
+                endpoints.MapGet("/Error", async context =>
+                {
+                    var feature = context.Features.Get<IExceptionHandlerPathFeature>();
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    context.Response.ContentType = "application/problem+json";
+                    await context.Response.WriteAsJsonAsync(new ProblemDetails
+                    {
+                        Status = StatusCodes.Status500InternalServerError,
+                        Title = "Internal Server Error",
+                        Detail = "An unhandled error occurred while processing the request.",
+                        Instance = feature?.Path
+                    });
+                });
             });
         }
     }
