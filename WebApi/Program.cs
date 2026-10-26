@@ -67,7 +67,14 @@ namespace WebApi
             app.UseHealthChecks("/health");
             app.MapControllers();
             // Terminal handler for UseExceptionHandler("/Error") re-execution.
-            app.MapMethods("/Error", new[] { "GET", "POST", "PUT", "DELETE" }, (HttpContext context) =>
+            // The original netcoreapp3.1 app configured UseExceptionHandler("/Error") but never
+            // mapped an /Error route, so unhandled production exceptions surfaced as a 404.
+            // This handler is an intentional divergence from that latent defect: it returns a
+            // 500 ProblemDetails response. Mapped for all HTTP verbs so that HEAD/PATCH/OPTIONS
+            // re-execution is covered as well.
+            app.MapMethods("/Error",
+                new[] { "GET", "POST", "PUT", "DELETE", "HEAD", "PATCH", "OPTIONS" },
+                (HttpContext context) =>
                 Results.Problem(
                     title: "An unexpected error occurred.",
                     statusCode: StatusCodes.Status500InternalServerError));
