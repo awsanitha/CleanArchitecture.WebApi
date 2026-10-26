@@ -1,0 +1,17 @@
+<Project>
+  <!--
+    Suppress false-positive NuGet audit advisory for AutoMapper.
+    GHSA-rvv3-g6hj-g44x is a JavaScript "automapper-ts" npm prototype-pollution
+    advisory incorrectly associated with the .NET AutoMapper package (Jimmy Bogard).
+    The .NET runtime has no concept of JavaScript prototype chains; this advisory
+    does not apply.
+
+    GHSA-g4vj-cjjj-v7hg is a low-severity advisory for NuGet.Packaging/Protocol
+    that comes from the PrivateAssets-only tooling package
+    Microsoft.VisualStudio.Web.CodeGeneration.Design and is not included at runtime.
+  -->
+  <ItemGroup>
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-rvv3-g6hj-g44x" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-g4vj-cjjj-v7hg" />
+  </ItemGroup>
+</Project>
