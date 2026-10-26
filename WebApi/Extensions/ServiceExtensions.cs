@@ -59,6 +59,9 @@ namespace WebApi.Extensions
                 config.AssumeDefaultVersionWhenUnspecified = true;
                 // Advertise the API versions supported for the particular endpoint
                 config.ReportApiVersions = true;
+                // Read version from the URL segment (e.g. /api/v1/...) — explicit reader avoids the
+                // performance overhead of the combined default reader (AV0015)
+                config.ApiVersionReader = new UrlSegmentApiVersionReader();
             })
             .AddMvc()
             .AddApiExplorer();

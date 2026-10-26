@@ -34,10 +34,11 @@
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.14" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
-      <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+    <!-- Version pins to override vulnerable transitive dependencies -->
     <PackageReference Include="NuGet.Packaging" Version="7.9.0" />
     <PackageReference Include="NuGet.Protocol" Version="7.9.0" />
-</ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
