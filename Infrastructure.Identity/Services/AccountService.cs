@@ -1,4 +1,6 @@
-﻿using Application.DTOs.Account;
+using Application.DTOs.Account;
+using Application.DTOs.Email;
+using Application.Enums;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Wrappers;
@@ -6,23 +8,17 @@ using Domain.Settings;
 using Infrastructure.Identity.Helpers;
 using Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Net.Cache;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Application.Enums;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Primitives;
-using Application.DTOs.Email;
 
 namespace Infrastructure.Identity.Services
 {
@@ -34,10 +30,11 @@ namespace Infrastructure.Identity.Services
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
-        public AccountService(UserManager<ApplicationUser> userManager, 
-            RoleManager<IdentityRole> roleManager, 
-            IOptions<JWTSettings> jwtSettings, 
-            IDateTimeService dateTimeService, 
+
+        public AccountService(UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IOptions<JWTSettings> jwtSettings,
+            IDateTimeService dateTimeService,
             SignInManager<ApplicationUser> signInManager,
             IEmailService emailService)
         {
@@ -46,7 +43,7 @@ namespace Infrastructure.Identity.Services
             _jwtSettings = jwtSettings.Value;
             _dateTimeService = dateTimeService;
             _signInManager = signInManager;
-            this._emailService = emailService;
+            _emailService = emailService;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -101,8 +98,7 @@ namespace Infrastructure.Identity.Services
                 {
                     await _userManager.AddToRoleAsync(user, Roles.Basic.ToString());
                     var verificationUri = await SendVerificationEmail(user, origin);
-                    //TODO: Attach Email Service here and configure it via appsettings
-                    await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+                    await _emailService.SendAsync(new EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
                 }
                 else
@@ -112,7 +108,7 @@ namespace Infrastructure.Identity.Services
             }
             else
             {
-                throw new ApiException($"Email {request.Email } is already registered.");
+                throw new ApiException($"Email {request.Email} is already registered.");
             }
         }
 
@@ -122,7 +118,6 @@ namespace Infrastructure.Identity.Services
             var roles = await _userManager.GetRolesAsync(user);
 
             var roleClaims = new List<Claim>();
-
             for (int i = 0; i < roles.Count; i++)
             {
                 roleClaims.Add(new Claim("roles", roles[i]));
@@ -153,24 +148,20 @@ namespace Infrastructure.Identity.Services
             return jwtSecurityToken;
         }
 
-        private string RandomTokenString()
+        private static string RandomTokenString()
         {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-            var randomBytes = new byte[40];
-            rngCryptoServiceProvider.GetBytes(randomBytes);
-            // convert random bytes to hex string
+            var randomBytes = RandomNumberGenerator.GetBytes(40);
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
-        
+
         private async Task<string> SendVerificationEmail(ApplicationUser user, string origin)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             var route = "api/account/confirm-email/";
-            var _enpointUri = new Uri(string.Concat($"{origin}/", route));
-            var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.Id);
+            var endpointUri = new Uri(string.Concat($"{origin}/", route));
+            var verificationUri = QueryHelpers.AddQueryString(endpointUri.ToString(), "userId", user.Id);
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
-            //Email Service Call Here
             return verificationUri;
         }
 
@@ -179,7 +170,7 @@ namespace Infrastructure.Identity.Services
             var user = await _userManager.FindByIdAsync(userId);
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return new Response<string>(user.Id, message: $"Account Confirmed for {user.Email}. You can now use the /api/Account/authenticate endpoint.");
             }
@@ -203,13 +194,11 @@ namespace Infrastructure.Identity.Services
         public async Task ForgotPassword(ForgotPasswordRequest model, string origin)
         {
             var account = await _userManager.FindByEmailAsync(model.Email);
-
-            // always return ok response to prevent email enumeration
             if (account == null) return;
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(account);
             var route = "api/account/reset-password/";
-            var _enpointUri = new Uri(string.Concat($"{origin}/", route));
+            var endpointUri = new Uri(string.Concat($"{origin}/", route));
             var emailRequest = new EmailRequest()
             {
                 Body = $"You reset token is - {code}",
@@ -224,7 +213,7 @@ namespace Infrastructure.Identity.Services
             var account = await _userManager.FindByEmailAsync(model.Email);
             if (account == null) throw new ApiException($"No Accounts Registered with {model.Email}.");
             var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return new Response<string>(model.Email, message: $"Password Resetted.");
             }
@@ -234,5 +223,4 @@ namespace Infrastructure.Identity.Services
             }
         }
     }
-
 }
