@@ -26,6 +26,7 @@ namespace WebApi
             services.AddIdentityInfrastructure(_config);
             services.AddPersistenceInfrastructure(_config);
             services.AddSharedInfrastructure(_config);
+            services.AddEndpointsApiExplorer();
             services.AddSwaggerExtension();
             services.AddControllers();
             services.AddApiVersioningExtension();
