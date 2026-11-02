@@ -17,7 +17,11 @@ namespace Application.Behaviours
             _validators = validators;
         }
 
+#if NET10_0_OR_GREATER
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+#else
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+#endif
         {
             if (_validators.Any())
             {
